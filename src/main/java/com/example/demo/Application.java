@@ -69,6 +69,22 @@ public class Application {
 		return ResponseEntity.ok(response.getBody());
 	}
 
+	@GetMapping(value = "/machineRequestSSL")
+	public ResponseEntity callHostSSL(@RequestParam(name = "machine")String machine) {
+		ResponseEntity<Map> response = null;
+		try {
+
+			response = restTemplate.getForEntity("https://" + machine + "/hostname", Map.class);
+		} catch (Exception e) {
+			if (response == null) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			} else {
+				return ResponseEntity.status(response.getStatusCode()).body(e.getMessage());
+			}
+		}
+		return ResponseEntity.ok(response.getBody());
+	}
+
 	/**
 	 * Root entry point for Spring Boot application.
 	 *
